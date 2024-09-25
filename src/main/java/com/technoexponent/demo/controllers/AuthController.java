@@ -95,7 +95,7 @@ public class AuthController {
 	               encoder.encode(signUpRequest.getPassword()));
 	    
 	    Set<Role> roles = new HashSet<>();
-	    Optional<Role> adminRole = roleRepository.findByName(ERole.ROLE_USER);
+	    Optional<Role> adminRole = roleRepository.findByName(ERole.ROLE_ADMIN);
 	    roles.add(adminRole.get());
 
 	    user.setRoles(roles);

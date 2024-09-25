@@ -10,11 +10,13 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.technoexponent.demo.dto.UserDto;
 import com.technoexponent.demo.model.ERole;
 import com.technoexponent.demo.model.Role;
 import com.technoexponent.demo.model.User;
@@ -41,18 +43,15 @@ public class UserController {
 	  PasswordEncoder encoder;
 	  
 
-	  @GetMapping("/profile")
+	  @GetMapping("/profile/{name}")
 	  @PreAuthorize("hasRole('ROLE_USER') or hasRole('ROLE_ADMIN')")
-	  public User userAccess() {
-	    Optional<User> user = userRepository.findByName("");
-	 
-	    return user.isPresent()?user.get():null;
-	  }
-
-	  @GetMapping("/admin")
-	  @PreAuthorize("hasRole('ADMIN')")
-	  public String adminAccess() {
-	    return "Admin Board.";
+	  public UserDto userAccess(@PathVariable("name") String name) {
+	    Optional<User> user = userRepository.findByName(name);
+	    UserDto userDetail= null; 
+	    if(user.isPresent()) {
+	    	userDetail = new UserDto(user.get().getName(), user.get().getEmail());
+	    }
+	    return userDetail;
 	  }
 	  
 	  @PostMapping("/add")
